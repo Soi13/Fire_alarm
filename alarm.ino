@@ -68,51 +68,19 @@ struct group_of_sensors {
 };
 
 // This function returns the structure which contain values of the 1st group of the flame and smoke sensors
-struct group_of_sensors grSensors1() {
+struct group_of_sensors grSensors(int a, int b, int c, int d, int e, int f) {
   group_of_sensors sensors_group;
-  changeMux(LOW, LOW, LOW); //Change multiplexer for reading flame sensor
+  delay(100);
+  changeMux(a, b, c); //Change multiplexer for reading flame sensor
   sensors_group.flame_sensor = analogRead(analogPin);
   delay(100);
-  changeMux(LOW, LOW, HIGH); //Change multiplexer for reading smoke sensor
-  sensors_group.smoke_sensor = analogRead(analogPin);
-  return sensors_group;
-}
-
-// This function returns the structure which contain values of the 2nd group of the flame and smoke sensors
-struct group_of_sensors grSensors2() {
-  group_of_sensors sensors_group;
-  changeMux(LOW, HIGH, LOW); //Change multiplexer for reading flame sensor
-  sensors_group.flame_sensor = analogRead(analogPin);
-  delay(100);
-  changeMux(LOW, HIGH, HIGH); //Change multiplexer for reading smoke sensor
-  sensors_group.smoke_sensor = analogRead(analogPin);
-  return sensors_group;
-}
-
-// This function returns the structure which contain values of the 3rd group of the flame and smoke sensors
-struct group_of_sensors grSensors3() {
-  group_of_sensors sensors_group;
-  changeMux(HIGH, LOW, LOW); //Change multiplexer for reading flame sensor
-  sensors_group.flame_sensor = analogRead(analogPin);
-  delay(100);
-  changeMux(HIGH, LOW, HIGH); //Change multiplexer for reading smoke sensor
-  sensors_group.smoke_sensor = analogRead(analogPin);
-  return sensors_group;
-}
-
-// This function returns the structure which contain values of the 4th group of the flame and smoke sensors
-struct group_of_sensors grSensors4() {
-  group_of_sensors sensors_group;
-  changeMux(HIGH, HIGH, LOW); //Change multiplexer for reading flame sensor
-  sensors_group.flame_sensor = analogRead(analogPin);
-  delay(100);
-  changeMux(HIGH, HIGH, HIGH); //Change multiplexer for reading smoke sensor
+  changeMux(d, e, f); //Change multiplexer for reading smoke sensor
   sensors_group.smoke_sensor = analogRead(analogPin);
   return sensors_group;
 }
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
 
@@ -120,22 +88,28 @@ void setup() {
   pinMode(MUX_A, OUTPUT);
   pinMode(MUX_B, OUTPUT);
   pinMode(MUX_C, OUTPUT);
+
+  reconnect();
 }
 
 void loop() {
-  if (!client.connected()) {
-    reconnect();
-  }
+  //if (!client.connected()) {
+  //  reconnect();
+  //}
   client.loop();
 
-  struct group_of_sensors sensors_values1 = grSensors1();
-  struct group_of_sensors sensors_values2 = grSensors2();
-  struct group_of_sensors sensors_values3 = grSensors3();
-  struct group_of_sensors sensors_values4 = grSensors4();
+  struct group_of_sensors sensors_values1 = grSensors(LOW, LOW, LOW, LOW, LOW, HIGH);
+  struct group_of_sensors sensors_values2 = grSensors(LOW, HIGH, LOW, LOW, HIGH, HIGH);
+  //struct group_of_sensors sensors_values3 = grSensors(HIGH, LOW, LOW, HIGH, LOW, HIGH);
+  //struct group_of_sensors sensors_values4 = grSensors(HIGH, HIGH, LOW, HIGH, HIGH, HIGH);
+  Serial.print("Flame sensor (Group 1): ");
   Serial.println(String(sensors_values1.flame_sensor).c_str());
+  Serial.print("Smoke sensor (Group 1): ");
+  Serial.println(String(sensors_values1.smoke_sensor).c_str());
+  Serial.print("Flame sensor (Group 2): ");
   Serial.println(String(sensors_values2.flame_sensor).c_str());
-  Serial.println(String(sensors_values3.flame_sensor).c_str());
-  Serial.println(String(sensors_values4.flame_sensor).c_str());
+  Serial.print("Smoke sensor (Group 2): ");
+  Serial.println(String(sensors_values2.smoke_sensor).c_str());
   delay(1000);
 
 }
