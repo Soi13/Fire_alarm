@@ -1,5 +1,8 @@
 #include <ESP8266WiFi.h>
 #include <PubSubClient.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
 
 #define wifi_ssid "Soi13"
 #define wifi_password ""
@@ -13,6 +16,14 @@
 #define MUX_C 15 //D8 on ESP8266 board
 
 #define analogPin A0
+
+#define SCREEN_WIDTH 128 // OLED display width, in pixels
+#define SCREEN_HEIGHT 64 // OLED display height, in pixels
+
+// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+#define OLED_RESET -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+#define SCREEN_ADDRESS 0x3C ///< See datasheet for Address; 0x3D for 128x64, 0x3C for 128x32
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 WiFiClient espClient;
 PubSubClient client(espClient);
@@ -90,6 +101,21 @@ void setup() {
   pinMode(MUX_C, OUTPUT);
 
   reconnect();
+
+  //Initializing display
+  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { // Address 0x3D for 128x64
+    Serial.println(F("SSD1306 allocation failed"));
+    for(;;);
+  }
+  delay(2000);
+  //Display greetings.
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.println("Hello!!!");
+  display.display();
+  delay(2000);
 }
 
 void loop() {
@@ -110,6 +136,30 @@ void loop() {
   Serial.println(String(sensors_values2.flame_sensor).c_str());
   Serial.print("Smoke sensor (Group 2): ");
   Serial.println(String(sensors_values2.smoke_sensor).c_str());
+
+  //Dsiplay data on the OLED screen
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(WHITE);
+  display.setCursor(0, 0);
+  display.print("Gr1-Flame sensor:");
+  display.println(sensors_values1.flame_sensor);
+  display.print("Gr1-Smoke sensor:");
+  display.println(sensors_values1.smoke_sensor);
+  display.print("Gr2-Flame sensor:");
+  display.println(sensors_values2.flame_sensor);
+  display.print("Gr2-Smoke sensor:");
+  display.println(sensors_values2.smoke_sensor);
+  /*display.print("Gr3-Flame sensor:");
+  display.println(sensors_values3.flame_sensor);
+  display.print("Gr3-Smoke sensor:");
+  display.println(sensors_values3.smoke_sensor);
+  display.print("Gr4-Flame sensor:");
+  display.println(sensors_values4.flame_sensor);
+  display.print("Gr4-Smoke sensor:");
+  display.println(sensors_values4.smoke_sensor);
+  */
+  display.display();
   delay(1000);
 
 }
