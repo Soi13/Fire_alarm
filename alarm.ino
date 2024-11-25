@@ -126,8 +126,8 @@ void loop() {
 
   struct group_of_sensors sensors_values1 = grSensors(LOW, LOW, LOW, LOW, LOW, HIGH);
   struct group_of_sensors sensors_values2 = grSensors(LOW, HIGH, LOW, LOW, HIGH, HIGH);
-  //struct group_of_sensors sensors_values3 = grSensors(HIGH, LOW, LOW, HIGH, LOW, HIGH);
-  //struct group_of_sensors sensors_values4 = grSensors(HIGH, HIGH, LOW, HIGH, HIGH, HIGH);
+  struct group_of_sensors sensors_values3 = grSensors(HIGH, LOW, LOW, HIGH, LOW, HIGH);
+  struct group_of_sensors sensors_values4 = grSensors(HIGH, HIGH, LOW, HIGH, HIGH, HIGH);
   Serial.print("Flame sensor (Group 1): ");
   Serial.println(String(sensors_values1.flame_sensor).c_str());
   Serial.print("Smoke sensor (Group 1): ");
@@ -136,6 +136,14 @@ void loop() {
   Serial.println(String(sensors_values2.flame_sensor).c_str());
   Serial.print("Smoke sensor (Group 2): ");
   Serial.println(String(sensors_values2.smoke_sensor).c_str());
+  Serial.print("Flame sensor (Group 3): ");
+  Serial.println(String(sensors_values3.flame_sensor).c_str());
+  Serial.print("Smoke sensor (Group 3): ");
+  Serial.println(String(sensors_values3.smoke_sensor).c_str());
+  Serial.print("Flame sensor (Group 4): ");
+  Serial.println(String(sensors_values4.flame_sensor).c_str());
+  Serial.print("Smoke sensor (Group 4): ");
+  Serial.println(String(sensors_values4.smoke_sensor).c_str());
 
   //Dsiplay data on the OLED screen
   display.clearDisplay();
@@ -150,7 +158,7 @@ void loop() {
   display.println(sensors_values2.flame_sensor);
   display.print("Gr2-Smoke sensor:");
   display.println(sensors_values2.smoke_sensor);
-  /*display.print("Gr3-Flame sensor:");
+  display.print("Gr3-Flame sensor:");
   display.println(sensors_values3.flame_sensor);
   display.print("Gr3-Smoke sensor:");
   display.println(sensors_values3.smoke_sensor);
@@ -158,7 +166,6 @@ void loop() {
   display.println(sensors_values4.flame_sensor);
   display.print("Gr4-Smoke sensor:");
   display.println(sensors_values4.smoke_sensor);
-  */
   display.display();
   delay(1000);
 
