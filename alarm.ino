@@ -11,6 +11,15 @@
 #define mqtt_user "mqtt_user"
 #define mqtt_password ""
 
+#define gr1_flame_sensor "homeassistant/sensor/gr1_flame_sensor"
+#define gr1_smoke_sensor "homeassistant/sensor/gr1_smoke_sensor"
+#define gr2_flame_sensor "homeassistant/sensor/gr2_flame_sensor"
+#define gr2_smoke_sensor "homeassistant/sensor/gr2_smoke_sensor"
+#define gr3_flame_sensor "homeassistant/sensor/gr3_flame_sensor"
+#define gr3_smoke_sensor "homeassistant/sensor/gr3_smoke_sensor"
+#define gr4_flame_sensor "homeassistant/sensor/gr4_flame_sensor"
+#define gr4_smoke_sensor "homeassistant/sensor/gr4_smoke_sensor"
+
 #define MUX_A 12 //D6 on ESP8266 board
 #define MUX_B 13 //D7 on ESP8266 board
 #define MUX_C 15 //D8 on ESP8266 board
