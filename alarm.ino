@@ -90,13 +90,17 @@ struct group_of_sensors {
 // This function returns the structure which contain values of the 1st group of the flame and smoke sensors
 struct group_of_sensors grSensors(int a, int b, int c, int d, int e, int f) {
   group_of_sensors sensors_group;
-  delay(100);
+  //delay(100);
   changeMux(a, b, c); //Change multiplexer for reading flame sensor
   sensors_group.flame_sensor = analogRead(analogPin);
   delay(100);
   changeMux(d, e, f); //Change multiplexer for reading smoke sensor
   sensors_group.smoke_sensor = analogRead(analogPin);
   return sensors_group;
+}
+
+int avg_val(int val1, int val2, int val3, int val4) {
+  return (val1 + val2 + val3 + val4) / 4;
 }
 
 void setup() {
@@ -153,6 +157,10 @@ void loop() {
   Serial.println(String(sensors_values4.flame_sensor).c_str());
   Serial.print("Smoke sensor (Group 4): ");
   Serial.println(String(sensors_values4.smoke_sensor).c_str());
+  Serial.print("Flame sensors average value: ");
+  Serial.println(String(avg_val(sensors_values1.flame_sensor, sensors_values2.flame_sensor, sensors_values3.flame_sensor, sensors_values4.flame_sensor)).c_str());
+  Serial.print("Smoke sensors average value: ");
+  Serial.println(String(avg_val(sensors_values1.smoke_sensor, sensors_values2.smoke_sensor, sensors_values3.smoke_sensor, sensors_values4.smoke_sensor)).c_str());
 
   //Dsiplay data on the OLED screen
   display.clearDisplay();
@@ -176,6 +184,6 @@ void loop() {
   display.print("Gr4-Smoke sensor:");
   display.println(sensors_values4.smoke_sensor);
   display.display();
-  delay(1000);
+  delay(2000);
 
 }
