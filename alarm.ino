@@ -90,11 +90,12 @@ struct group_of_sensors {
 // This function returns the structure which contain values of the 1st group of the flame and smoke sensors
 struct group_of_sensors grSensors(int a, int b, int c, int d, int e, int f) {
   group_of_sensors sensors_group;
-  //delay(100);
+  delay(200);
   changeMux(a, b, c); //Change multiplexer for reading flame sensor
+  delay(200);
   sensors_group.flame_sensor = analogRead(analogPin);
-  delay(100);
   changeMux(d, e, f); //Change multiplexer for reading smoke sensor
+  delay(200);
   sensors_group.smoke_sensor = analogRead(analogPin);
   return sensors_group;
 }
@@ -185,5 +186,4 @@ void loop() {
   display.println(sensors_values4.smoke_sensor);
   display.display();
   delay(2000);
-
 }
